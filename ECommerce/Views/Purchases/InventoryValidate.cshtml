@@ -1,0 +1,111 @@
+﻿@model IEnumerable<ECommerce.Models.Product>
+
+
+@{
+    ViewBag.Title = "Quantidade Estoque";
+}
+
+<h2>Estoque com Limite Máximo de 50</h2>
+<hr />
+
+
+   @Html.ActionLink("Add Produto", "AddProduct", "Purchases", new { }, new { @class = "dialog-window btn btn-info" })
+
+
+<hr />
+<table class="table">
+    <tr>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.Image)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+       
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.Stock)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+           
+            <td>
+                @if (!string.IsNullOrEmpty(item.Image))
+                {
+                    <img src="@Url.Content(item.Image)" alt="Image" style="width:65px;height:65px;max-width: 100%; height: auto;" />
+
+                }
+            </td>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+           
+            <td>
+
+                @Html.DisplayFor(modelItem => item.Stock)
+
+            </td>
+           
+        </tr>
+    }
+
+</table>
+
+
+
+<div class="modal fade" id="AddProduct" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-
+     hidden="true" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2 class="modal-title"></h2>
+            </div>
+            <div class="modal-body"><div class="te">Espere por Favor...</div></div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("body").on("click", "a.dialog-window", null, function (e) {
+                e.preventDefault();
+                var $link = $(this);
+                var title = $link.text();
+                $('#AddProduct .modal-title').html(title);
+                var url = $(this).attr('href');
+                if (url.indexOf('#') == 0) {
+                    $('#AddProduct').modal('show');
+                }
+                else {
+                    $.get(url, function (data) {
+                        $('#AddProduct .te').html(data);
+                        $('#AddProduct').modal();
+                    }).success(function () { $('input:text:visible:first').focus(); });
+
+                }
+            });
+        });
+
+</script>
+
+
+}
